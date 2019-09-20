@@ -1,0 +1,85 @@
+{
+    "name": "itinerisltd/wp-intelligent-tracking-prevention-cookie-hoist",
+    "type": "wordpress-plugin",
+    "description": "TODO.",
+    "keywords": [
+        "email",
+        "phpmailer",
+        "smtp",
+        "wordpress",
+        "wp"
+    ],
+    "homepage": "https://github.com/ItinerisLtd/wp-intelligent-tracking-prevention-cookie-hoist",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Itineris Limited",
+            "email": "hello@itineris.co.uk",
+            "homepage": "https://itineris.co.uk/",
+            "role": "Company"
+        },
+        {
+            "name": "Tang Rufus",
+            "email": "tangrufus@gmail.com",
+            "homepage": "https://typist.tech/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "require-dev": {
+        "codeception/base": "^3.0",
+        "itinerisltd/itineris-wp-coding-standards": "^0.2.3",
+        "roave/security-advisories": "dev-master",
+        "roots/wordpress": "^5.1"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Itineris\\WPIntelligentTrackingPreventionCookieHoist\\": "src/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "/.*",
+            "/*",
+            "!*LICENSE*",
+            "!/*.php",
+            "!/README.txt",
+            "!src",
+            "!vendor/*.php",
+            "!vendor/**/*.php"
+        ]
+    },
+    "prefer-stable": true,
+    "scripts": {
+        "pretag": [
+            "composer update",
+            "@style:check",
+            "github_changelog_generator --no-verbose",
+            "npx doctoc README.md"
+        ],
+        "release:build": [
+            "rm -fr vendor",
+            "composer install --no-dev --prefer-dist --optimize-autoloader --no-suggest",
+            "rm -fr release wordpress",
+            "composer archive --format=zip --dir=release --file=wp-intelligent-tracking-prevention-cookie-hoist"
+        ],
+        "style:check": "phpcs",
+        "style:fix": "phpcbf",
+        "test": "codecept run"
+    },
+    "support": {
+        "email": "hello@itineris.co.uk",
+        "issues": "https://github.com/ItinerisLtd/wp-intelligent-tracking-prevention-cookie-hoist/issues",
+        "source": "https://github.com/ItinerisLtd/wp-intelligent-tracking-prevention-cookie-hoist"
+    }
+}
