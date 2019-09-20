@@ -3,7 +3,7 @@
  * Plugin Name:     WP Intelligent Tracking Prevention Cookie Hoist
  * Plugin URI:      https://github.com/ItinerisLtd/wp-intelligent-tracking-prevention-cookie-hoist
  * Description:     TODO.
- * Version:         0.1.0-RC1
+ * Version:         0.1.0-RC2
  * Author:          Itineris Limited
  * Author URI:      https://itineris.co.uk
  * License:         MIT
