@@ -10,11 +10,11 @@ use WP_REST_Server;
 
 class CookieCreateController
 {
-    const VERSION = '1';
+    const DEFAULT_PATH = '/';
+    const DEFAULT_TTL = 30758400; // 1 year in second = 356 * 24 * 60 *60;
     const NAMESPACE = 'wpitpch/v1';
     const ROUTE = 'cookies';
     const TARGETS = ['_ga'];
-    const TTL = 30758400; // 1 year in second = 356 * 24 * 60 *60;
 
     /**
      * Register route.
@@ -33,9 +33,16 @@ class CookieCreateController
                         return sanitize_text_field($param);
                     },
                 ],
+                'path' => [ // TODO: Add `validate_callback`?
+                    'required' => true,
+                    'default' => static::DEFAULT_PATH,
+                    'sanitize_callback' => function ($param) {
+                        return sanitize_text_field($param);
+                    },
+                ],
                 'ttl' => [
                     'required' => true,
-                    'default' => static::TTL,
+                    'default' => static::DEFAULT_TTL,
                     'validate_callback' => function ($param) {
                         return is_int($param);
                     },
@@ -53,20 +60,22 @@ class CookieCreateController
      */
     public function create(WP_REST_Request $request)
     {
-        $ttl = $request->get_param('ttl');
-        $domain = $request->get_param('domain');
-
         // TODO: Add filters.
+        $domain = $request->get_param('domain');
+        $path = $request->get_param('path');
+        $ttl = $request->get_param('ttl');
+
+
         $expire = time() + $ttl;
 
-        $extendedCookies = array_map(function (string $name) use ($expire, $domain) {
+        $extendedCookies = array_map(function (string $name) use ($expire, $path, $domain) {
             // phpcs:ignore -- TODO: To be reviewed.
             if (! $_COOKIE[$name]) {
                 return null;
             }
 
             // phpcs:ignore -- TODO: To be reviewed.
-            return setcookie($name, $_COOKIE[$name], $expire, '', $domain) ? $name : null;
+            return setcookie($name, $_COOKIE[$name], $expire, $path, $domain) ? $name : null;
         }, static::TARGETS);
 
         return new WP_REST_Response([
